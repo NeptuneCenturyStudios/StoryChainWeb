@@ -25,14 +25,18 @@
 
                     <v-text-field label="Password"
                                   v-model="password"
-                                  type="password"
-                                  ></v-text-field>
-                    
+                                  type="password"></v-text-field>
+
+                    <router-link :to="{name: 'forgot-password'}">Forgot password?</router-link>
+
                 </v-card-text>
 
                 <v-card-actions>
                     <v-btn color="primary" @click="signIn" :loading="loading">
                         Sign In
+                    </v-btn>
+                    <v-btn color="primary" :to="{ name: 'register'}" :disabled="loading">
+                        Register
                     </v-btn>
                     <v-btn :to="{ name: 'home'}" :disabled="loading">
                         Cancel
