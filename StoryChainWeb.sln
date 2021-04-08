@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "StoryChain", "StoryChain\StoryChain.njsproj", "{AECC5462-F274-407A-8DBE-26B7143393C7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AECC5462-F274-407A-8DBE-26B7143393C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AECC5462-F274-407A-8DBE-26B7143393C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AECC5462-F274-407A-8DBE-26B7143393C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AECC5462-F274-407A-8DBE-26B7143393C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {138A8802-26A1-4667-980A-102539325030}
+	EndGlobalSection
+EndGlobal
