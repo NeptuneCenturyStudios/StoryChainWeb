@@ -1,12 +1,21 @@
 <template>
-    <v-container>
+    <div>
         Dashboard
-    </v-container>
+        <v-btn @click="update">
+            Change Name
+        </v-btn>
+    </div>
 </template>
 <script>
     export default {
         data() {
             return {};
+        },
+        methods:
+        {
+            update() {
+                this.$store.commit('updateName', "Foo Bar");
+            }
         }
     }
 </script>

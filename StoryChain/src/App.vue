@@ -25,19 +25,23 @@
             <v-btn href="https://github.com/vuetifyjs/vuetify/releases/latest"
                    target="_blank"
                    text>
-                <span class="mr-2">Latest Release</span>
+                <span class="mr-2">{{ name }}</span>
                 <v-icon>mdi-open-in-new</v-icon>
             </v-btn>
         </v-app-bar>
 
         <v-main>
-            <router-view></router-view>
+            <v-container>
+                <router-view></router-view>
+            </v-container>
         </v-main>
 
     </v-app>
 </template>
 
 <script>
+
+    import { mapState } from 'vuex';
 
     export default {
         name: 'App',
@@ -49,5 +53,11 @@
         data: () => ({
             //
         }),
+
+        computed: {
+            ...mapState({
+                name: 'name'
+            })
+        }
     };
 </script>

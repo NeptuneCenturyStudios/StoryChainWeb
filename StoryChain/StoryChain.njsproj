@@ -33,6 +33,7 @@
     <Content Include="public\favicon.ico" />
     <Content Include="public\index.html" />
     <Content Include="src\App.vue" />
+    <Content Include="src\assets\logo.svg" />
     <Content Include="src\components\Dashboard.vue" />
     <Content Include="src\components\HelloWorld.vue" />
     <Content Include="src\components\Home.vue" />
@@ -44,6 +45,8 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\plugins\vuetify.js" />
+    <Content Include="src\plugins\vuex.js" />
+    <Content Include="src\utils\http-helpers.js" />
     <Content Include="vue.config.js" />
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +55,7 @@
     <Folder Include="src\" />
     <Folder Include="src\assets\" />
     <Folder Include="src\components\" />
+    <Folder Include="src\utils\" />
     <Folder Include="src\plugins\" />
   </ItemGroup>
   <ItemGroup>
