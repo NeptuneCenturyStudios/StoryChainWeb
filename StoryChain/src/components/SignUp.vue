@@ -1,51 +1,69 @@
 <template>
 
     <div class="d-flex justify-center">
-
+        <v-overlay :absolute="true" :value="loading"></v-overlay>
         <div>
             <p class="text-h4">
                 Ready to join the fun?
             </p>
-            <p class="text-h6 text--secondary">
-                Create your account now!
-            </p>
-            <v-card elevation="2" max-width="25rem" :loading="loading">
-                <v-overlay :absolute="true" :value="loading"></v-overlay>
-                <template slot="progress">
-                    <v-progress-linear color="deep-purple"
-                                       height="10"
-                                       indeterminate></v-progress-linear>
-                </template>
 
-                <v-card-text>
+            <ValidationObserver v-slot="{ invalid }">
+                <v-card elevation="2" max-width="25rem" :loading="loading">
 
-                    <v-text-field label="Email"
-                                  v-model="email"
-                                  hint="example@email.com"></v-text-field>
+                    <template slot="progress">
+                        <v-progress-linear color="deep-purple"
+                                           height="10"
+                                           indeterminate></v-progress-linear>
+                    </template>
 
-                    <v-text-field label="Password"
-                                  v-model="password"
-                                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                  :type="showPassword ? 'text' : 'password'"
-                                  @click:append="showPassword = !showPassword"
-                                  hint="Make it secure"></v-text-field>
-                    <p>
-                        By creating your account, you agree to the terms and privacy policy.
-                    </p>
-                </v-card-text>
+                    <v-card-title>
+                        <p class="text-h6 text--secondary">
+                            Create your account now!
+                        </p>
+                    </v-card-title>
 
-                <v-card-actions>
-                    <v-btn color="primary" @click="signUp" :loading="loading">
-                        Sign Up
-                    </v-btn>
-                    <v-btn :to="{ name: 'home'}" :disabled="loading">
-                        Cancel
-                    </v-btn>
+                    <v-card-text>
+
+                        <!--Email-->
+                        <ValidationProvider name="Email" rules="required|email" v-slot="v">
+                            <v-text-field label="Email"
+                                          type="email"
+                                          required
+                                          v-model="email"
+                                          hint="example@email.com"></v-text-field>
+                            <span class="red--text">{{ v.errors[0] }}</span>
+                        </ValidationProvider>
+
+                        <!--Password-->
+                        <ValidationProvider name="Password" rules="required" v-slot="v">
+                            <v-text-field label="Password"
+                                          :type="showPassword ? 'text' : 'password'"
+                                          required
+                                          v-model="password"
+                                          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                          @click:append="showPassword = !showPassword"
+                                          hint="Make it secure"></v-text-field>
+                            <span class="red--text">{{ v.errors[0] }}</span>
+                        </ValidationProvider>
+
+                        <p>
+                            By creating your account, you agree to the terms and privacy policy.
+                        </p>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-btn color="primary" @click="signUp" :loading="loading" :disabled="invalid">
+                            Sign Up
+                        </v-btn>
+                        <v-btn :to="{ name: 'home'}" :disabled="loading">
+                            Cancel
+                        </v-btn>
 
 
-                </v-card-actions>
+                    </v-card-actions>
 
-            </v-card>
+                </v-card>
+            </ValidationObserver>
         </div>
     </div>
 
@@ -54,7 +72,13 @@
 <script>
     import axios from 'axios';
     import { httpHelpers } from '../utils/http-helpers';
-    import 'material-icons'
+    import 'material-icons';
+
+    import { extend } from "vee-validate";
+    import { required, email } from "vee-validate/dist/rules";
+
+    extend("required", { ...required, message: "{_field_} is required." });
+    extend("email", email);
 
     export default {
         data() {

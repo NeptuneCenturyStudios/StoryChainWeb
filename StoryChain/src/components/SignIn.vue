@@ -84,7 +84,7 @@
 <script>
     import axios from 'axios';
     import { httpHelpers } from './../utils/http-helpers';
-    import 'material-icons'
+    import 'material-icons';
     import { extend } from "vee-validate";
     import { required, email } from "vee-validate/dist/rules";
 
