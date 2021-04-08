@@ -40,7 +40,7 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="src\components\SignIn.vue" />
-    <Content Include="src\components\Register.vue" />
+    <Content Include="src\components\SignUp.vue" />
     <Content Include="src\plugins\router.js">
       <SubType>Code</SubType>
     </Content>

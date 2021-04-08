@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import Toasted from 'vue-toasted';
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
 
 // Load external plugins
 import vuetify from './plugins/vuetify';
@@ -10,9 +11,14 @@ import store from './plugins/vuex';
 // Plugins
 Vue.use(Toasted)
 
+// Configurations
 Vue.config.productionTip = true;
 
 Vue.prototype.$hostName = 'https://localhost:44324';
+
+// Register global components
+Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
 
 new Vue({
     vuetify,

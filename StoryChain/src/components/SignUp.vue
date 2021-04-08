@@ -35,8 +35,8 @@
                 </v-card-text>
 
                 <v-card-actions>
-                    <v-btn color="primary" @click="register" :loading="loading">
-                        Create Account
+                    <v-btn color="primary" @click="signUp" :loading="loading">
+                        Sign Up
                     </v-btn>
                     <v-btn :to="{ name: 'home'}" :disabled="loading">
                         Cancel
@@ -53,7 +53,7 @@
 
 <script>
     import axios from 'axios';
-    import { httpHelpers } from './../utils/http-helpers';
+    import { httpHelpers } from '../utils/http-helpers';
     import 'material-icons'
 
     export default {
@@ -66,13 +66,13 @@
             };
         },
         methods: {
-            async register() {
+            async signUp() {
                 let vm = this;
                 vm.loading = true;
 
                 try {
                     // Call API to create the user's account
-                    let response = await axios.post(vm.$hostName + '/api/v1/account/register', { email: vm.email, password: vm.password });
+                    let response = await axios.post(vm.$hostName + '/api/v1/account/sign-up', { email: vm.email, password: vm.password });
 
                     try {
                         // User has successfully created their account. Store the token
