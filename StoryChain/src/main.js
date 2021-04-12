@@ -2,6 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import Toasted from 'vue-toasted';
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
+import 'material-icons';
 
 // Load external plugins
 import vuetify from './plugins/vuetify';

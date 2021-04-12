@@ -4,7 +4,7 @@
         <v-overlay :absolute="true" :value="loading"></v-overlay>
         <div>
             <p class="text-h4">
-                Forgot your password?
+                Change password
             </p>
 
             <ValidationObserver v-slot="{ invalid }">
@@ -18,29 +18,31 @@
 
                     <v-card-title>
                         <p class="text-h6 text--secondary">
-                            Enter your email address and we'll send you a link to reset it.
+                            Let's get your password fixed!
                         </p>
                     </v-card-title>
 
                     <v-card-text>
-
-                        <!--Email-->
-                        <ValidationProvider name="Email" rules="required|email" v-slot="v">
-                            <v-text-field label="Email"
-                                          type="email"
+                        
+                        <!--Password-->
+                        <ValidationProvider name="Password" rules="required" v-slot="v">
+                            <v-text-field label="Password"
+                                          autocomplete="new-password"
+                                          :type="showPassword ? 'text' : 'password'"
                                           required
-                                          v-model="email"
-                                          hint="example@email.com"></v-text-field>
+                                          v-model="password"
+                                          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                          @click:append="showPassword = !showPassword"
+                                          hint="Make it secure"></v-text-field>
                             <span class="red--text">{{ v.errors[0] }}</span>
                         </ValidationProvider>
 
                     </v-card-text>
 
                     <v-card-actions>
-                        <v-btn color="primary" @click="resetPassword" :loading="loading" :disabled="invalid">
-                            Reset
+                        <v-btn color="primary" @click="changePassword" :loading="loading" :disabled="invalid">
+                            Change Password
                         </v-btn>
-
                         <v-btn :to="{ name: 'home'}" :disabled="loading">
                             Cancel
                         </v-btn>
@@ -50,43 +52,45 @@
 
                 </v-card>
             </ValidationObserver>
-
         </div>
-
-
     </div>
 
 </template>
 
 <script>
     import axios from 'axios';
-    import { httpHelpers } from './../utils/http-helpers';
-    import 'material-icons';
+    import { httpHelpers } from '../utils/http-helpers';
+    
     import { extend } from "vee-validate";
-    import { required, email } from "vee-validate/dist/rules";
+    import { required } from "vee-validate/dist/rules";
 
     extend("required", { ...required, message: "{_field_} is required." });
-    extend("email", email);
+    //extend("email", email);
 
     export default {
-        title: 'Forgot Password',
+        title: 'Change Password',
+        props: {
+            userId: String,
+            code: String
+        },
         data() {
             return {
                 loading: false,
-                email: null
+                showPassword: false,
+                email: null,
+                password: null,
+                
             };
         },
         methods: {
-            async resetPassword() {
+            async changePassword() {
                 let vm = this;
                 vm.loading = true;
-
+                debugger
                 try {
                     // Call API to create the user's account
-                    await axios.post(vm.$hostName + '/api/v1/account/forgot-password', { email: vm.email });
+                    await axios.post(vm.$hostName + '/api/v1/account/change-password', { userId: vm.userId, code: vm.code, password: vm.password });
 
-                    // Something went wrong here
-                    vm.$toasted.success("We just sent you an email with instructions on how to reset your password.", { icon: "check" });
                 }
                 catch (reason) {
                     // Handle any ajax errors

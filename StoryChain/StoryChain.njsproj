@@ -34,6 +34,7 @@
     <Content Include="public\index.html" />
     <Content Include="src\App.vue" />
     <Content Include="src\assets\logo.svg" />
+    <Content Include="src\components\ChangePassword.vue" />
     <Content Include="src\components\Dashboard.vue" />
     <Content Include="src\components\ForgotPassword.vue" />
     <Content Include="src\components\HelloWorld.vue" />
