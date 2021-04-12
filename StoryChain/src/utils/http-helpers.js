@@ -14,7 +14,7 @@ const httpHelpers = {
                 for (const [key, value] of Object.entries(reason.response.data.errors)) {
                     errors = errors.concat(value);
                 }
-                Vue.toasted.error(errors.join("<br />"), { duration: 2000, iconPack: 'material', icon: 'lock' });
+                Vue.toasted.error(errors.join("<br />"), { icon: 'error' });
             }
         }
 	}

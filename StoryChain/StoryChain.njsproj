@@ -35,12 +35,14 @@
     <Content Include="src\App.vue" />
     <Content Include="src\assets\logo.svg" />
     <Content Include="src\components\Dashboard.vue" />
+    <Content Include="src\components\ForgotPassword.vue" />
     <Content Include="src\components\HelloWorld.vue" />
     <Content Include="src\components\Home.vue" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="src\components\SignIn.vue" />
     <Content Include="src\components\SignUp.vue" />
+    <Content Include="src\mixins\title-mixin.js" />
     <Content Include="src\plugins\router.js">
       <SubType>Code</SubType>
     </Content>
@@ -55,6 +57,7 @@
     <Folder Include="src\" />
     <Folder Include="src\assets\" />
     <Folder Include="src\components\" />
+    <Folder Include="src\mixins\" />
     <Folder Include="src\utils\" />
     <Folder Include="src\plugins\" />
   </ItemGroup>

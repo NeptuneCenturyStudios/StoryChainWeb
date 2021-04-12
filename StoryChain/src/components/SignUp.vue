@@ -81,6 +81,7 @@
     extend("email", email);
 
     export default {
+        title: 'Sign Up',
         data() {
             return {
                 loading: false,

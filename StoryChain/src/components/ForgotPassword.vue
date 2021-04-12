@@ -4,7 +4,7 @@
         <v-overlay :absolute="true" :value="loading"></v-overlay>
         <div>
             <p class="text-h4">
-                Ready to resume the fun?
+                Forgot your password?
             </p>
 
             <ValidationObserver v-slot="{ invalid }">
@@ -18,7 +18,7 @@
 
                     <v-card-title>
                         <p class="text-h6 text--secondary">
-                            Sign into your account now!
+                            It's okay. We understand. There's so much to remember these days. Just enter your email address and we'll send you a link to reset it.
                         </p>
                     </v-card-title>
 
@@ -34,30 +34,11 @@
                             <span class="red--text">{{ v.errors[0] }}</span>
                         </ValidationProvider>
 
-                        <!--Password-->
-                        <ValidationProvider name="Password" rules="required" v-slot="v">
-                            <v-text-field label="Password"
-                                          type="password"
-                                          required
-                                          v-model="password"></v-text-field>
-                            <span class="red--text">{{ v.errors[0] }}</span>
-                        </ValidationProvider>
-
-                        <!--Remember me-->
-                        <v-switch>
-                            <template v-slot:label>
-                                Remember me
-                            </template>
-
-                        </v-switch>
-
-                        <router-link :to="{name: 'forgot-password'}">Forgot password?</router-link>
-
                     </v-card-text>
 
                     <v-card-actions>
-                        <v-btn color="primary" @click="signIn" :loading="loading" :disabled="invalid">
-                            Sign In
+                        <v-btn color="primary" @click="resetPassword" :loading="loading" :disabled="invalid">
+                            Reset
                         </v-btn>
 
                         <v-btn :to="{ name: 'home'}" :disabled="loading">
@@ -69,10 +50,6 @@
 
                 </v-card>
             </ValidationObserver>
-
-            <p class="text--secondary mt-3">
-                Don't have an account? <router-link :to="{name: 'sign-up'}">Sign up!</router-link>
-            </p>
 
         </div>
 
@@ -92,34 +69,24 @@
     extend("email", email);
 
     export default {
-        title: 'Sign In',
+        title: 'Forgot Password',
         data() {
             return {
                 loading: false,
-                email: null,
-                password: null
+                email: null
             };
         },
         methods: {
-            async signIn() {
+            async resetPassword() {
                 let vm = this;
                 vm.loading = true;
 
                 try {
                     // Call API to create the user's account
-                    let response = await axios.post(vm.$hostName + '/api/v1/account/sign-in', { email: vm.email, password: vm.password });
+                    await axios.post(vm.$hostName + '/api/v1/account/forgot-password', { email: vm.email });
 
-                    try {
-                        // User has successfully created their account. Store the token
-                        // so it can be sent to the server when the API is called.
-                        localStorage.setItem("auth", response.data.token);
-                        // Route the user to the dashboard
-                        vm.$router.push({ name: "dashboard" });
-                    }
-                    catch (ex) {
-                        // Something went wrong here
-                        vm.$toasted.error("Hmm, we couldn't save your account access token for some reason.");
-                    }
+                    // Something went wrong here
+                    vm.$toasted.success("We just sent you an email with instructions on how to reset your password.", { icon: "check" });
                 }
                 catch (reason) {
                     // Handle any ajax errors

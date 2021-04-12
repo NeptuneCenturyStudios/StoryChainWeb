@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Home from './../components/Home';
 import SignIn from './../components/SignIn';
 import SignUp from './../components/SignUp';
+import ForgotPassword from './../components/ForgotPassword';
 import Dashboard from './../components/Dashboard';
 
 Vue.use(Router);
@@ -16,6 +17,9 @@ export default new Router({
     },
     {
         path: '/sign-up', name: 'sign-up', component: SignUp,
+    },
+    {
+        path: '/forgot-password', name: 'forgot-password', component: ForgotPassword,
     },
     {
         path: '/dashboard', name: 'dashboard', component: Dashboard,
