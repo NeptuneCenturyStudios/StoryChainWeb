@@ -86,11 +86,12 @@
             async changePassword() {
                 let vm = this;
                 vm.loading = true;
-                debugger
+                
                 try {
                     // Call API to create the user's account
                     await axios.post(vm.$hostName + '/api/v1/account/change-password', { userId: vm.userId, code: vm.code, password: vm.password });
-
+                    vm.$toasted.success("Your password has been changed!");
+                    vm.$router.push({ name: "sign-in" });
                 }
                 catch (reason) {
                     // Handle any ajax errors

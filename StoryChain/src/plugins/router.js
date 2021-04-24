@@ -6,6 +6,7 @@ import SignUp from './../components/SignUp';
 import ForgotPassword from './../components/ForgotPassword';
 import ChangePassword from './../components/ChangePassword';
 import Dashboard from './../components/Dashboard';
+import CreateStory from './../components/CreateStory';
 
 Vue.use(Router);
 
@@ -26,7 +27,16 @@ export default new Router({
         path: '/change-password/:userId/:code', name: 'change-password', component: ChangePassword, props: true,
     },
     {
+        path: '/sign-out', name: 'sign-out', component: Home,
+    },
+    {
+        path: '/account', name: 'account', component: Dashboard,
+    },
+    {
         path: '/dashboard', name: 'dashboard', component: Dashboard,
+    },
+    {
+        path: '/create', name: 'create', component: CreateStory,
     },
         //{
         //    path: '/post/:id', name: 'post', component: Post, props: true,

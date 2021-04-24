@@ -37,6 +37,7 @@
                         <!--Password-->
                         <ValidationProvider name="Password" rules="required" v-slot="v">
                             <v-text-field label="Password"
+                                          autocomplete="new-password"
                                           :type="showPassword ? 'text' : 'password'"
                                           required
                                           v-model="password"
@@ -100,9 +101,13 @@
                     let response = await axios.post(vm.$hostName + '/api/v1/account/sign-up', { email: vm.email, password: vm.password });
 
                     try {
+                        // Set signed in state
+                        vm.$store.commit('isSignedIn', true);
+
                         // User has successfully created their account. Store the token
                         // so it can be sent to the server when the API is called.
                         localStorage.setItem("auth", response.data.token);
+                        
                         // Route the user to the dashboard
                         vm.$router.push({ name: "dashboard" });
                     }

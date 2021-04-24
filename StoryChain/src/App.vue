@@ -23,12 +23,59 @@
 
             <v-spacer></v-spacer>
 
-            <v-btn href="https://github.com/vuetifyjs/vuetify/releases/latest"
-                   target="_blank"
-                   text>
-                <span class="mr-2">{{ name }}</span>
-                <v-icon>mdi-open-in-new</v-icon>
-            </v-btn>
+            <div v-if="!isSignedIn">
+                <v-btn :to="{name: 'sign-in'}" text>
+                    <span class="mr-2">Sign In</span>
+
+                </v-btn>
+
+                <v-btn :to="{name: 'sign-up'}" text>
+                    <span class="mr-2">Sign Up</span>
+
+                </v-btn>
+
+            </div>
+            <div v-else>
+
+                <v-menu bottom>
+
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-avatar v-on="on">
+                            <v-img alt="Avatar"
+                                   class="shrink mr-2"
+                                   contain
+                                   src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+                                   transition="scale-transition"
+                                   width="40" />
+                        </v-avatar>
+                    </template>
+
+                    <v-list>
+                        <v-list-item-group color="primary">
+                            <v-list-item :to="{name: 'account'}">
+                                <v-list-item-icon>
+                                    <v-icon>mdi-account</v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-content>
+                                    <v-list-item-title>My Account</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-divider></v-divider>
+                            <v-list-item @click="signOut">
+                                <v-list-item-icon>
+                                    <v-icon>mdi-logout</v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-content>
+                                    <v-list-item-title>Sign Out</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list-item-group>
+                    </v-list>
+                </v-menu>
+
+
+
+            </div>
         </v-app-bar>
 
         <v-main>
@@ -51,15 +98,29 @@
 
         },
 
-        data: () => ({
-            //
-        }),
+        data() {
+            return {};
+        },
 
         computed: {
-            ...mapState({
-                name: 'name',
-                appName: 'appName'
-            })
+            ...mapState(["appName", "name", "isSignedIn"])
+        },
+        methods: {
+            signOut() {
+                
+                // Clear the auth token
+                try {
+                    localStorage.removeItem("auth");
+                }
+                finally {
+                    // Set the global flag that we're signed out
+                    this.$store.commit("isSignedIn", false);
+                    // Go to home page
+                    this.$router.push({ name: "home" });
+                }
+
+                
+            }
         }
     };
 </script>

@@ -110,11 +110,21 @@
                     let response = await axios.post(vm.$hostName + '/api/v1/account/sign-in', { email: vm.email, password: vm.password });
 
                     try {
+                        // Set signed in state
+                        vm.$store.commit('isSignedIn', true);
+
                         // User has successfully created their account. Store the token
                         // so it can be sent to the server when the API is called.
                         localStorage.setItem("auth", response.data.token);
+
+                        // Return URL
+                        let routeName = vm.$route && vm.$route.query && vm.$route.query.returnUrl;
+                        if (!routeName) {
+                            routeName = "dashboard";
+                        }
+
                         // Route the user to the dashboard
-                        vm.$router.push({ name: "dashboard" });
+                        vm.$router.push({ name: routeName });
                     }
                     catch (ex) {
                         // Something went wrong here
