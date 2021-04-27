@@ -65,7 +65,6 @@
     import { required } from "vee-validate/dist/rules";
 
     extend("required", { ...required, message: "{_field_} is required." });
-    //extend("email", email);
 
     export default {
         title: 'Change Password',
