@@ -110,7 +110,7 @@
 
                 try {
                     // Call API to create the story
-                    await axios.post(vm.$hostName + '/api/v1/story', {
+                    await axios.post(vm.$hostName + '/api/v1/stories', {
                         title: vm.title,
                         firstScene: vm.firstScene,
                         showOnlyPreviousScene: vm.showOnlyPreviousScene,
@@ -124,7 +124,7 @@
                 }
                 catch (reason) {
                     // Handle any ajax errors
-                    httpHelpers.handleError(reason);
+                    httpHelpers.handleError(vm, reason);
                 }
                 finally {
                     vm.loading = false;

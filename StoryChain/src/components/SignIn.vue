@@ -110,12 +110,9 @@
                     let response = await axios.post(vm.$hostName + '/api/v1/account/sign-in', { email: vm.email, password: vm.password });
 
                     try {
-                        // Set signed in state
-                        vm.$store.commit('isSignedIn', true);
-
-                        // User has successfully created their account. Store the token
-                        // so it can be sent to the server when the API is called.
-                        localStorage.setItem("auth", response.data.token);
+                        
+                        // Signed in. Store the tokens so it can be used later for API calls
+                        httpHelpers.signIn(vm, response.data);
 
                         // Return URL
                         let routeName = vm.$route && vm.$route.query && vm.$route.query.returnUrl;
@@ -128,12 +125,12 @@
                     }
                     catch (ex) {
                         // Something went wrong here
-                        vm.$toasted.error("Hmm, we couldn't save your account access token for some reason.");
+                        vm.$toasted.error("Hmm, we couldn't sign you in for some reason. Do you have cookies turned off?");
                     }
                 }
                 catch (reason) {
                     // Handle any ajax errors
-                    httpHelpers.handleError(reason);
+                    httpHelpers.handleError(vm, reason);
                 }
                 finally {
                     vm.loading = false;

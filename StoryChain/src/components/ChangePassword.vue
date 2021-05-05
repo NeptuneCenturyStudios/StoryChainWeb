@@ -94,7 +94,7 @@
                 }
                 catch (reason) {
                     // Handle any ajax errors
-                    httpHelpers.handleError(reason);
+                    httpHelpers.handleError(vm, reason);
                 }
                 finally {
                     vm.loading = false;

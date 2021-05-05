@@ -19,6 +19,7 @@
 
 <script>
     import { mapState } from 'vuex';
+import { httpHelpers } from '../utils/http-helpers';
 
     export default {
         name: 'Home',
@@ -27,18 +28,11 @@
             let vm = this;
 
             // If the user is already logged in, then redirect to the dashboard
-            try {
-                let auth = localStorage.getItem("auth");
-                if (auth) {
-                    vm.$store.commit('isSignedIn', true);
-                    // Go to dashboard. If the auth fails for some reason, the app
-                    // will redirect the user to the login page.
-                    vm.$router.push({ name: "dashboard" });
-                }
-
-            } catch (ex) {
-                vm.$store.commit('isSignedIn', false);
-                vm.$router.push({ name: "home" });
+            let isAuthenticated = httpHelpers.isAuthenticated(vm);
+            if (isAuthenticated) {
+                // Go to dashboard. If the auth fails for some reason, the app
+                // will redirect the user to the login page.
+                vm.$router.push({ name: "dashboard" });
             }
 
         },

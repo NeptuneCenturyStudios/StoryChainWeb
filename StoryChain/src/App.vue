@@ -90,6 +90,7 @@
 <script>
 
     import { mapState } from 'vuex';
+    import { httpHelpers } from './utils/http-helpers';
 
     export default {
         name: 'App',
@@ -107,19 +108,9 @@
         },
         methods: {
             signOut() {
-                
-                // Clear the auth token
-                try {
-                    localStorage.removeItem("auth");
-                }
-                finally {
-                    // Set the global flag that we're signed out
-                    this.$store.commit("isSignedIn", false);
-                    // Go to home page
-                    this.$router.push({ name: "home" });
-                }
+                // Sign out and go home
+                httpHelpers.signOut(this);
 
-                
             }
         }
     };
