@@ -18,17 +18,17 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
-import { httpHelpers } from '../utils/http-helpers';
+
+    import { httpHelpers } from '../utils/http-helpers';
 
     export default {
         name: 'Home',
-        created() {
-            
+        async created() {
+
             let vm = this;
 
             // If the user is already logged in, then redirect to the dashboard
-            let isAuthenticated = httpHelpers.isAuthenticated(vm);
+            let isAuthenticated = await httpHelpers.isAuthenticatedAsync(vm);
             if (isAuthenticated) {
                 // Go to dashboard. If the auth fails for some reason, the app
                 // will redirect the user to the login page.
@@ -37,7 +37,6 @@ import { httpHelpers } from '../utils/http-helpers';
 
         },
         computed: {
-            ...mapState(["appName", "name", "isSignedIn"])
         }
     };
 </script>

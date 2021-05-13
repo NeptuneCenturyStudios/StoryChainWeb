@@ -35,6 +35,16 @@
                             <span class="red--text">{{ v.errors[0] }}</span>
                         </ValidationProvider>
 
+                        <ValidationProvider name="Genre" rules="required" v-slot="v">
+                            <v-select :items="genres"
+                                      label="Genre"
+                                      item-text="name"
+                                      item-value="id"
+                                      v-model="selectedGenres"
+                                      multiple></v-select>
+                            <span class="red--text">{{ v.errors[0] }}</span>
+                        </ValidationProvider>
+
                         <!--First scene-->
                         <ValidationProvider name="First Scene" rules="required" v-slot="v">
                             <v-textarea label="First Scene"
@@ -60,12 +70,13 @@
                         <v-slider v-model="numberOfScenes"
                                   hint="Few scenes may mean a faster story, but won't leave as much room for development"
                                   max="25"
+                                  step="5"
                                   min="5"></v-slider>
 
                     </v-card-text>
 
                     <v-card-actions>
-                        <v-btn color="primary" @click="createStory" :loading="loading" :disabled="invalid">
+                        <v-btn color="primary" @click="createStoryAsync" :loading="loading" :disabled="invalid">
                             Create Story
                         </v-btn>
                         <v-btn :to="{ name: 'dashboard'}" :disabled="loading">
@@ -92,37 +103,60 @@
 
     export default {
         title: 'Create Story',
+        async mounted() {
+            let vm = this;
+
+            await vm.getGenresAsync();
+        },
         data() {
             return {
                 loading: false,
                 title: null,
+                genres: [],
+                selectedGenres: [],
                 firstScene: null,
                 showOnlyPreviousScene: true,
                 numberOfScenes: 15
             };
         },
         methods: {
-            async createStory() {
+            async getGenresAsync() {
+                let vm = this;
+                // Get the auth header and refresh the token if necessary
+                let authHeader = await httpHelpers.getAuthHeaderAsync(vm);
+                try {
+                    // Get the genres
+                    let results = await axios.get(vm.$hostName + '/api/v1/genres', { headers: { ...authHeader } });
+                    vm.genres = results.data;
+
+                } catch (reason) {
+                    // Handle any ajax errors
+                    httpHelpers.handleError(vm, reason);
+                }
+            },
+            async createStoryAsync() {
                 let vm = this;
                 vm.loading = true;
 
-                let token = localStorage.getItem("auth");
-
+                // Get the auth header and refresh the token if necessary
+                let authHeader = await httpHelpers.getAuthHeaderAsync(vm);
                 try {
-                    // Call API to create the story
+                    // Create new story
                     await axios.post(vm.$hostName + '/api/v1/stories', {
                         title: vm.title,
                         firstScene: vm.firstScene,
                         showOnlyPreviousScene: vm.showOnlyPreviousScene,
-                        numberOfScenes: vm.numberOfScenes
-                    }, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
+                        numberOfScenes: vm.numberOfScenes,
+                        genreIds: vm.selectedGenres
+                    }, { headers: { ...authHeader } });
 
-                }
-                catch (reason) {
+                    // Notify user the story has been created
+                    vm.$toasted.success("Your story has been added to the public queue!");
+
+                    // Redirect back to the dashboard
+                    vm.$router.push({ name: "dashboard" });
+
+                } catch (reason) {
                     // Handle any ajax errors
                     httpHelpers.handleError(vm, reason);
                 }

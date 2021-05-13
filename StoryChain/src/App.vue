@@ -44,7 +44,7 @@
                             <v-img alt="Avatar"
                                    class="shrink mr-2"
                                    contain
-                                   src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+                                   :src="avatarUrl"
                                    transition="scale-transition"
                                    width="40" />
                         </v-avatar>
@@ -104,7 +104,16 @@
         },
 
         computed: {
-            ...mapState(["appName", "name", "isSignedIn"])
+            avatarUrl() {
+                let vm = this;
+                if (vm.userDetails && vm.userDetails.emailHash) {
+                    return `https://www.gravatar.com/avatar/${vm.userDetails.emailHash}`;
+                }
+                else {
+                    return null;
+                }
+            },
+            ...mapState(["appName", "userDetails", "isSignedIn"])
         },
         methods: {
             signOut() {

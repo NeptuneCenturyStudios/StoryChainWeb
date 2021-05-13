@@ -41,8 +41,11 @@
     <Content Include="src\components\Home.vue" />
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Content Include="src\components\Play.vue" />
+    <Content Include="src\components\Scene.vue" />
     <Content Include="src\components\SignIn.vue" />
     <Content Include="src\components\SignUp.vue" />
+    <Content Include="src\components\Story.vue" />
     <Content Include="src\mixins\title-mixin.js" />
     <Content Include="src\plugins\router.js">
       <SubType>Code</SubType>

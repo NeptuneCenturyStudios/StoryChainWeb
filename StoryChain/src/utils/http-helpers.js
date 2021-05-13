@@ -21,11 +21,11 @@ const httpHelpers = {
                 // Check if the token is about to expire
                 if (Date.now() >= decodedToken.exp * 1000) {
                     let refreshToken = localStorage.getItem(REFRESH_TOKEN_STORE_NAME);
-                    
+
                     // Expired. Call for a new refresh token
                     let refreshResult = await axios.post(vm.$hostName + '/api/v1/account/refresh-token', { token: token, refreshToken: refreshToken });
                     if (refreshResult.data.success) {
-                        
+
                         // Store the new tokens and use them
                         this.signIn(vm, refreshResult.data);
                         token = refreshResult.data.token;
@@ -52,6 +52,7 @@ const httpHelpers = {
         localStorage.setItem(REFRESH_TOKEN_STORE_NAME, auth.refreshToken);
         // Set signed in state
         vm.$store.commit('isSignedIn', true);
+        vm.$store.commit('updateUserDetails', auth.userDetails);
     },
     signOut(vm) {
         // Clear the auth token
@@ -65,15 +66,39 @@ const httpHelpers = {
             vm.$router.push({ name: "home" });
         }
     },
-    isAuthenticated(vm) {
+    async isAuthenticatedAsync(vm, returnUrlRouteName) {
+        let isAuthenticated = false;
         try {
             let auth = localStorage.getItem(TOKEN_STORE_NAME);
-            vm.$store.commit('isSignedIn', !!auth);
-            return !!auth;
+            isAuthenticated = !!auth;
+
+            // Set signed in flag
+            vm.$store.commit('isSignedIn', isAuthenticated);
+
+            // If not authenticated, push the sign in route
+            if (isAuthenticated && !vm.$store.state.userDetails) {
+                // Let's check if we have the user details stored. If not, fetch them.
+                // Get the auth header and refresh the token if necessary
+                let authHeader = await this.getAuthHeaderAsync(vm);
+
+                // Fetch user details
+                let userDetails = await axios.get(vm.$hostName + '/api/v1/account/user-details', { headers: { ...authHeader } });
+                
+                // Commit them to the state
+                vm.$store.commit('updateUserDetails', userDetails.data);
+
+            }
 
         } catch (e) {
-            return false;
+            isAuthenticated = false;
         }
+        finally {
+            if (!isAuthenticated) {
+                vm.$router.push({ name: "sign-in", query: { returnUrl: returnUrlRouteName } });
+            }
+        }
+
+        return isAuthenticated;
 
     },
     handleError(vm, reason) {

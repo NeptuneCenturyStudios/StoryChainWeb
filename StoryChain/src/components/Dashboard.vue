@@ -2,8 +2,12 @@
     <div>
         <p class="text-h4">Dashboard</p>
         <div>
-            <v-btn color="purple lighten-3" @click="update" :to="{name: 'create'}">
+            <v-btn color="purple lighten-3" :to="{name: 'create'}" class="mr-3">
                 Create a Story
+            </v-btn>
+
+            <v-btn color="blue lighten-1" :to="{name: 'play'}">
+                Play
             </v-btn>
 
             <v-data-iterator :items="myStories"
@@ -13,7 +17,6 @@
                              :search="search"
                              :sort-by="sortBy.toLowerCase()"
                              :sort-desc="sortDesc"
-                             
                              class="mt-3">
 
 
@@ -66,14 +69,29 @@
                                md="4"
                                lg="3">
                             <v-card>
-                                <v-card-title class="subheading font-weight-bold">
-                                    {{ item.title }}
+                                <v-card-title>
+                                    <div>
+                                        <div class="subheadingfont-weight-bold">
+                                            {{ item.title }}
+                                        </div>
+                                        <div>
+                                            <em><span class="text--secondary text-subtitle-2">Started by {{item.createdBy.firstName}} {{item.createdBy.lastName}}</span></em>
+                                        </div>
+                                    </div>
+
                                 </v-card-title>
 
                                 <v-divider></v-divider>
 
                                 <v-card-text>
-                                    <span>{{ item.scenes && item.scenes[0].text }}</span>
+                                    <span>{{ item.scene && item.scene.text }}</span>
+                                    <em><span class="text--secondary text-subtitle-2">- {{item.scene.author.firstName}} {{item.scene.author.lastName}}</span></em>
+                                    <v-progress-linear color="light-blue"
+                                                       height="15"
+                                                       :value="item.progress"
+                                                       striped>
+                                        {{item.totalScenes}} of {{item.maxScenes}}
+                                    </v-progress-linear>
                                 </v-card-text>
                             </v-card>
                         </v-col>
@@ -86,7 +104,6 @@
 </template>
 <script>
     import axios from 'axios';
-    import { mapState } from 'vuex';
     import { httpHelpers } from '../utils/http-helpers';
 
     export default {
@@ -94,27 +111,18 @@
         async created() {
             let vm = this;
 
-            if (!httpHelpers.isAuthenticated(vm)) {
-                this.$router.push({ name: "sign-in", query: { returnUrl: "dashboard" } });
+            if (!await httpHelpers.isAuthenticatedAsync(vm, "home")) {
+                return;
             }
 
-            // Fetch the data for the dashboard
-            let authHeader = await httpHelpers.getAuthHeaderAsync(vm);
-            try {
-                // Get the user's stories
-                let storiesResult = await axios.get(vm.$hostName + "/api/v1/stories/mine", { headers: { ...authHeader } });
-                vm.myStories = storiesResult.data
-                
-            } catch (reason) {
-                // Handle any ajax errors
-                httpHelpers.handleError(vm, reason);
-            }
+            vm.getMyStoriesAsync();
+
         },
         data() {
             return {
                 sortBy: "title",
                 myStories: [],
-                itemsPerPage: 4,
+                itemsPerPage: 12,
                 page: 1,
                 search: null,
                 sortDesc: false,
@@ -122,15 +130,22 @@
             };
         },
         computed: {
-            ...mapState(["isSignedIn"])
         },
         methods:
         {
-            getMyStories() {
+            async getMyStoriesAsync() {
+                let vm = this;
+                // Fetch the data for the dashboard
+                let authHeader = await httpHelpers.getAuthHeaderAsync(vm);
+                try {
+                    // Get the user's stories
+                    let storiesResult = await axios.get(vm.$hostName + "/api/v1/stories/mine", { headers: { ...authHeader } });
+                    vm.myStories = storiesResult.data
 
-            },
-            update() {
-                this.$store.commit('updateName', "Foo Bar");
+                } catch (reason) {
+                    // Handle any ajax errors
+                    httpHelpers.handleError(vm, reason);
+                }
             }
         }
     }

@@ -8,11 +8,11 @@ export default new Vuex.Store({
     state: {
         appName: 'Plot Mash',
         isSignedIn: false,
-        name: 'Test'
+        userDetails: null
     },
     mutations: {
-        updateName(state, name) {
-            state.name = name;
+        updateUserDetails(state, value) {
+            state.userDetails = value;
         },
         isSignedIn(state, value) {
             state.isSignedIn = value;
