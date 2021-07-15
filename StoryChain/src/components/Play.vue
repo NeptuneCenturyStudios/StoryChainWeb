@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex justify-center">
         <v-overlay :absolute="true" :value="loading"></v-overlay>
-        <div>
+        <div style="max-width: 25rem">
 
             <ValidationObserver v-if="lockedStory" v-slot="{ invalid }">
                 <!--Title-->
@@ -12,7 +12,7 @@
                     {{lockedStory.scenes[0].text}}
                 </p>
                 {{timeCritical}}
-                <v-card elevation="2" max-width="25rem" :loading="loading">
+                <v-card elevation="2"  :loading="loading" >
 
                     <template slot="progress">
                         <v-progress-linear color="deep-purple"
@@ -21,11 +21,13 @@
                     </template>
 
                     <v-card-title>
-                        Time remaining:
-                        {{timeLeft}}
+                        <span color="text--red">
+                            Time remaining:
+                            {{timeLeft}}
+                        </span>
                     </v-card-title>
 
-                    <v-card-text>
+                    <v-card-text >
 
                         <!--First scene-->
                         <ValidationProvider name="Next Scene" rules="required" v-slot="v">
@@ -35,6 +37,7 @@
                                         type="textarea"
                                         required
                                         v-model="scene"
+                                        :disabled="timeUp"
                                         hint="Read the previous scene to get an idea of where to go next"></v-textarea>
                             <span class="red--text">{{ v.errors[0] }}</span>
                         </ValidationProvider>

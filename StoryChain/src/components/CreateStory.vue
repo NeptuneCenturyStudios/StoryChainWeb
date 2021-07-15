@@ -2,13 +2,13 @@
 
     <div class="d-flex justify-center">
         <v-overlay :absolute="true" :value="loading"></v-overlay>
-        <div>
+        <div style="max-width:25rem;">
             <p class="text-h4">
                 Create a story
             </p>
 
             <ValidationObserver v-slot="{ invalid }">
-                <v-card elevation="2" max-width="25rem" :loading="loading">
+                <v-card elevation="2"  :loading="loading">
 
                     <template slot="progress">
                         <v-progress-linear color="deep-purple"
@@ -60,7 +60,7 @@
                         <!--Only show previous scene-->
                         <v-switch v-model="showOnlyPreviousScene">
                             <template v-slot:label>
-                                Only show authors the previous scene and the title
+                                Only show the previous scene and title
                             </template>
 
                         </v-switch>
@@ -115,7 +115,7 @@
                 genres: [],
                 selectedGenres: [],
                 firstScene: null,
-                showOnlyPreviousScene: true,
+                showOnlyPreviousScene: false,
                 numberOfScenes: 15
             };
         },
